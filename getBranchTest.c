@@ -1,19 +1,19 @@
 #include <stdio.h>
 
-int getChildren(int arr[3][3]) {
-    int i; int j; int children[10][3][3]; int zeroCount = -1; int zeroInfo[10][3]; int p, q, r, t,s;   
+int *getChildren(int arr[3][3]) { 
+
+    int i; int j; static int children[10][3][3]; int zeroCount = -1; int zeroInfo[10][3]; int p, q, r, t,s;   
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
             if (arr[i][j] == 0) {
-                zeroCount++; // 3
-                zeroInfo[zeroCount][0] = zeroCount; // 3
-                zeroInfo[zeroCount][1] = i; // 2 
-                zeroInfo[zeroCount][2] = j; // 0
-                for (p = 0; p < 3; p++) printf("%d\n", zeroInfo[zeroCount][p]);
+                zeroCount++; 
+                zeroInfo[zeroCount][0] = zeroCount; 
+                zeroInfo[zeroCount][1] = i; 
+                zeroInfo[zeroCount][2] = j; 
+                
             }
         }
     }
-    //printf("\n%d\n", zeroInfo[2][2]);
     for (i = 0; i <= zeroCount; i++) {
         arr[zeroInfo[i][1]][zeroInfo[i][2]] = 9;
         for (p = 0; p < 3; p++) {
@@ -22,15 +22,9 @@ int getChildren(int arr[3][3]) {
             }
         }
         arr[zeroInfo[i][1]][zeroInfo[i][2]] = 0;
-        for (t = 0; t < 3; t++) {
-            for (s = 0; s < 3; s++) {
-                printf("%d ", arr[t][s]);
-            }
-            printf("\n");
-        }
     }
-    printf("first el: %d\n", children[2][1][0]);
-    for(p=0;p<=zeroCount;p++)
+    //printf("first el: %d\n", children[2][1][0]);
+    /*for(p=0;p<=zeroCount;p++)
 	{
 		for(q=0;q<3;q++)
 		{
@@ -44,7 +38,8 @@ int getChildren(int arr[3][3]) {
 			}
 		}
 		printf("\n");
-	}
+	}*/
+    return children;
 }
 
 int main() 
@@ -55,8 +50,11 @@ int main()
          {0, 0, 0}, 
          {0, 0, 0}
         };
-    
-    getChildren(arr);
-
+    int *childPointer;
+    childPointer = getChildren(arr);
+    while (*childPointer != 0) {
+        printf("%d", *childPointer);
+        childPointer++;
+    }
     return 0;
 }

@@ -2,11 +2,74 @@
 #include <stdlib.h>
 #include <time.h>
 
-int rando() {
-    int r; 
-    srand(time(NULL));
-    r = rand()%3;
-    return r;
+int min(int a, int b) {return (a > b) ? b : a;}
+int max(int a, int b) {return (a > b) ? a : b;}
+
+int _2Dto1D(int x, int y) {
+    int i, j; int count = 0;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            if (i == x && j == y) return count; else count++;
+        }
+    }
+}
+
+int _1Dto2D(int n, int c[]) {
+    int i, j; int count = -1;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            count++;
+            if (count == n) {
+                c[0] = i;
+                c[1] = j;
+            }
+        }
+    }
+}
+
+
+int minimax(int depth, int ourArr[3][3], int maximizer) {
+    static int i,j,eval,maxScore,minScore;
+    int trackPosition;
+    int score = scoreEval(ourArr[3][3]);
+    if (depth == 0 || score == 1 || score == 0) {
+        return score;
+        printf("\n%d\n", score);
+    } 
+    if (maximizer == 9) {
+        maxScore = -10;
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < 3; j++) {
+                if (ourArr[i][j] == 0) {
+                    ourArr[i][j] = 9;
+                    eval = minimax(depth - 1, ourArr, 1);
+                    maxScore = max(maxScore, eval);
+                    trackPosition = _2Dto1D(i,j);
+                    ourArr[i][j] = 0;
+                }
+            }
+        }
+        return maxScore;
+    }
+    if (maximizer == 1) {
+        minScore = 10;
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < 3; j++) {
+                if (ourArr[i][j] == 0) {
+                    ourArr[i][j] = 1;
+                    eval = minimax(depth - 1, ourArr, 9);
+                    minScore = min(minScore, eval); 
+                    ourArr[i][j] = 0;
+                }
+            }
+        }
+        return minScore;
+    }
+
+    // Output to be sent to main
+    //int out[2] = {1, 2};
+    //c[0] = out[0];
+    //c[1] = out[1];
 }
 
 int printGame(int ourArr[3][3]) {  
@@ -18,8 +81,9 @@ int printGame(int ourArr[3][3]) {
         printf("\n");
     }
 }
+    
+int scoreEval(int ourArr[3][3]) {
 
-int gameOver(int ourArr[3][3]) {
     int i, j; int count; 
     int zeroCount = 0; // To DRAW when zeroes run out
     for (i = 0; i < 3; i++) { // Row wise checking
@@ -77,7 +141,7 @@ int main() {
         printf("You choose : ");
         scanf("%d %d", &x, &y);  cSet[x][y] = 1;
         printGame(cSet); // User turn
-        temp = gameOver(cSet);
+        temp = scoreEval(cSet);
         if (temp == 1) {
             printf("YOU WIN!\n");
             break;
@@ -91,7 +155,9 @@ int main() {
         we will build a function for it)*/
         i = 0; 
         while (i == 0) {
-            int cX = rando(); int cY = rando();
+            int c[2];
+            //minimax(cSet, c);
+            int cX = c[0]; int cY = c[1];
             //printf("%d %d", cX, cY);
             if (cSet[cX][cY] != 1 && cSet[cX][cY] != 9) { 
                 printf("Computer chose: %d %d\n", cX, cY);
@@ -102,7 +168,7 @@ int main() {
         }
 
         printGame(cSet); // CPU turn 
-        temp = gameOver(cSet);
+        temp = scoreEval(cSet);
         if (temp == 1) {
             printf("COMPUTER WIN!\n");
             break;
