@@ -24,17 +24,22 @@ int _1Dto2D(int n, int c[]) {
     }
     return 0;
 }
-int scoreEval(int ourArr[3][3]) {
 
+int minimax(int depth, int ourArr[3][3], int maximizer) {
+    //-------------------------------
+    int changeScore;
     int i, j; int count; 
-    int zeroCount = 0; // To DRAW when zeroes run out
+    int countOfZeros = 0; // To DRAW when zeroes run out
+    changeScore = -1;
     for (i = 0; i < 3; i++) { // Row wise checking
         for (j = 1; j < 3; j++) {
             if (ourArr[i][j-1] == ourArr[i][j]) count++;
         }
         if (count == 2 && ourArr[i][0] != 0) {
-            if (ourArr[i][0] == 9) return 1;
-            else if (ourArr[i][0] == 1) return -2;
+            if (ourArr[i][0] == 9) {
+                changeScore = 1;
+            }
+            else if (ourArr[i][0] == 1) changeScore = -2;
         } 
         count = 0; // Reset count after each scan for a row
     }
@@ -43,15 +48,15 @@ int scoreEval(int ourArr[3][3]) {
             if (ourArr[j-1][i] == ourArr[j][i]) count++;
         }
         if (count == 2 && ourArr[0][i] != 0) {
-            if (ourArr[0][i] == 9 ) return 1;
-            else if (ourArr[0][i] == 1) return -2;
+            if (ourArr[0][i] == 9 ) changeScore = 1;
+            else if (ourArr[0][i] == 1) changeScore = -2;
         }  
         count = 0; // Reset count 
     }
     for (i = 0; i < 3; i++) { // Check for Draw
         for (j = 0; j < 3; j++) {
             if (ourArr[i][j] == 0)  {
-                zeroCount++; 
+                countOfZeros++; 
             }
         }
     } 
@@ -59,23 +64,21 @@ int scoreEval(int ourArr[3][3]) {
     i = 0;
     // Diagonal wise checking, NEED IMPROVEMENT!!, to be applicable for n x n matrix
     if (ourArr[i][i] == ourArr[i+1][i+1] && ourArr[i+1][i+1] == ourArr[i+2][i+2] && ourArr[i][i] != 0) {
-            if (ourArr[i][i] == 9 ) return 1;
-            else if (ourArr[i][i] == 1) return -2;
+            if (ourArr[i][i] == 9 ) changeScore = 1;
+            else if (ourArr[i][i] == 1) changeScore = -2;
         }
 
     else if (ourArr[2][0] == ourArr[1][1] && ourArr[1][1] == ourArr[0][2] && ourArr[1][1] != 0) {
-            if (ourArr[1][1] == 9 ) return 1;
-            else if (ourArr[1][1] == 1) return -2;
+            if (ourArr[1][1] == 9 ) changeScore = 1;
+            else if (ourArr[1][1] == 1) changeScore = -2;
         }
 
-    // Return Draw condition
-    else if (zeroCount == 0) return 0;
+    // changeScore = Draw condition
+    else if (countOfZeros == 0) changeScore = 0;  
 
-    else return -1;
-}
-int minimax(int depth, int ourArr[3][3], int maximizer) {
+    //---------------------------
+
     int children[10][3][3]; 
-    //printf("%d", depth);
     int m; int w; int zeroCount = -1; int zeroInfo[10][3]; int p, q;   
     for (m = 0; m < 3; m++) {
         for (w = 0; w < 3; w++) {
@@ -94,68 +97,29 @@ int minimax(int depth, int ourArr[3][3], int maximizer) {
                 children[m][p][q] = ourArr[p][q];
             }
         }
-        // if (m == zeroCount) {
-        //     //do not use [10][0][0]
-        //     children[10][1][1] = zeroCount + 1;
-        // }
         ourArr[zeroInfo[m][1]][zeroInfo[m][2]] = 0;
     }
-    int i,j;
-    int eval,maxScore,minScore;
-    int g, h;
-    int score; 
-    score = scoreEval(ourArr);
-    //printf("%d", score);
-    if (depth == 0 || score != -1) {
-        // if (depth == 0) {
-        //     printf("score: %d\t", score);
-        //     if (score == 0 || score == -2) {
-                // for (g = 0; g < 3; g++) {
-                //     for (h = 0; h < 3; h++) {
-                //         printf("%d ", ourArr[g][h]);
-                //     }
-                //     printf("\n\t\t");
-                // }
-                // printf("\n");   
-        //     }
-        // }
-        return score;
+    int k,y;
+    int evalMax, evalMin, maxScore,minScore; 
+    if (depth == 0 || changeScore != -1) {
+        return changeScore;
     } 
     if (maximizer == 9) {
         maxScore = -10;
-        for (i = 0; i <= zeroCount; i++) {
-            eval = minimax(depth - 1, children[i], 1);
-            maxScore = max(maxScore, eval);
-            //printf("depth : %d, maxScore : %d\n", depth, maxScore);
+        for (k = 0; k <= zeroCount; k++) {
+            evalMax = minimax(depth - 1, children[k], 1);
+            if (evalMax > maxScore) {
+                positionHoldingMaxScore = k;
+            }
+            maxScore = max(maxScore, evalMax);
         }
-        //printf("maxScore : %d, depth : %d\n\n", maxScore, depth);
         return maxScore;
     }
     if (maximizer == 1) {
         minScore = 10;
-        for (j = 0; j <= zeroCount; j++) {
-            eval = minimax(depth - 1, children[j], 9);
-            minScore = min(minScore, eval);
-            if (depth == 5) {printf("j : %d, eval : %d\n", j, eval);
-            for (g = 0; g < 3; g++) {
-                    for (h = 0; h < 3; h++) {
-                        printf("%d ", children[j][g][h]);
-                    }
-                    printf("\n");
-                }
-                printf("\n");
-            }
-        }
-        if (depth == 5) {
-            positionHoldingMaxScore = j;
-            printf("%d %d\t", j, minScore);
-            for (g = 0; g < 3; g++) {
-                    for (h = 0; h < 3; h++) {
-                        printf("%d ", ourArr[g][h]);
-                    }
-                    printf("\n\t");
-                }
-                printf("\n");  
+        for (y = 0; y <= zeroCount; y++) {
+            evalMin = minimax(depth - 1, children[y], 9);
+            minScore = min(minScore, evalMin);
         }
         return minScore;
     }
@@ -163,13 +127,11 @@ int minimax(int depth, int ourArr[3][3], int maximizer) {
 
 int main () {
     int cSet[3][3] = { 
-      {9, 0, 1},
+      {9, 9, 1},
       {0, 1, 0}, 
-      {0, 0, 0} 
+      {0, 0, 1} 
     };
     int pos;
-    /*pos = */minimax(6, cSet, 9);
-    ///printf("%d", pos);
+    pos = minimax(4, cSet, 9);
+    printf("%d %d\n", pos, positionHoldingMaxScore);
 }
-
-//build ur tree!!!
