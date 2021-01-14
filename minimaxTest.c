@@ -149,6 +149,6 @@ int main () {
       {0, 0, 0} // returns the second zero!! Easy debug thing u can do really fast!!! 
     };
     int pos;
-    pos = minimax(8, cSet, 9);
+    pos = minimax(6, cSet, 9);
     printf("%d %d\n", pos, positionHoldingMaxScore);
 }

@@ -5,6 +5,22 @@ int positionHoldingMaxScore;
 int coordinatesHoldingMaxScore[2];
 int maxDepth;
 int noOfCalls;
+
+void printInstructions() {
+    char yORn;
+    printf("Hi welcome to this repo, this is a tic-tac-toe AI(uses minimax algorithm) written in C!\n\nPRESS ENTER TO CONTINUE\n");
+    scanf("%c", &yORn);
+    if (yORn) {
+    printf("Below is the chart displaying positons of the valid inputs,\n\n");
+    printf(" (0 0) (0 1) (0 2) \n (1 0) (1 1) (1 2) \n (2 0) (2 1) (2 2)\n");
+    yORn = '\n';
+    }
+    printf("\nPRESS ENTER TO CONTINUE\n"); scanf("%c", &yORn);
+    if (yORn)  
+    printf("For Instance, if you need to put X in the center, the input must be '1 1'\n");
+    printf("\nPRESS ENTER TO CONTINUE\n"); scanf("%c", &yORn);
+    if (yORn) printf("GOOD LUCK!, you get the privilege to start first against AI ;)\n\n");
+}
 int min(int a, int b) {return (a > b) ? b : a;}
 int max(int a, int b) {return (a > b) ? a : b;}
 
@@ -89,7 +105,6 @@ int minimax(int depth, int ourArr[3][3], int maximizer) {
         } 
 
     //---------------------------
-    //if (/*depth == 0 || */changeScore == 1) {printGame(ourArr); printf("\n");}
 
     int children[10][3][3]; 
     int m; int w; int zeroCount = -1; int zeroInfo[10][3]; int p, q;   
@@ -142,7 +157,9 @@ int printGame(int ourArr[3][3]) {
     int i, j;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
-            printf("%4d", ourArr[i][j]);
+            if (ourArr[i][j] == 0) printf("  #  ");
+            if (ourArr[i][j] == 1) printf("  X  ");
+            if (ourArr[i][j] == 9) printf("  O  ");
         }
         printf("\n");
     }
@@ -187,6 +204,7 @@ int scoreEval(int ourArr[3][3]) {
 }
 
 int main() {
+    printInstructions();
     int depth;
     int optimalPosition;
     int x, y; // User input coordinates 
@@ -206,12 +224,18 @@ int main() {
         noOfCalls = 0;
 
         // Scan for coordinates and set it to be 1 (user input)
+        
         printf("You choose : ");
-        scanf("%d %d", &x, &y);  cSet[x][y] = 1;
+        scanf("%d %d", &x, &y);  
+        if (cSet[x][y] == 0) cSet[x][y] = 1; else {
+            printf("Refer to the Instructions. Enter a valid Input!\n");
+            printf("You choose : ");
+            scanf("%d %d", &x, &y);  
+        }
         printGame(cSet); // User turn
         temp = scoreEval(cSet);
         if (temp == 1) {
-            printf("YOU WIN!\n");
+            printf("YOU WIN! If you see this message, then you found a bug in my algorithm ;)\n");
             break;
         }
         else if (temp == 0) {
@@ -219,22 +243,17 @@ int main() {
             break;
         }
         depth = depthCounter(cSet);
-        printf("depth : %d\n", depth);
         int pos;
-        /* Random CPU Input (will be modified later, 
-        we will build a function for it)*/
         i = 0; 
         while (i == 0) {
             pos = minimax(depth + 1, cSet, 9);
-            printf("max: %d position : %d\n", pos, positionHoldingMaxScore);
             optimalCoordinates(cSet, positionHoldingMaxScore);
             int cX = coordinatesHoldingMaxScore[0];
             int cY = coordinatesHoldingMaxScore[1];
-            //printf("%d %d\n", cX, cY);
             if (cSet[cX][cY] != 1 && cSet[cX][cY] != 9) { 
                 printf("Computer chose: %d %d\n", cX, cY);
                 cSet[cX][cY] = 9;
-                i++; // Alt for break
+                i++; 
             }
             else continue;
         }

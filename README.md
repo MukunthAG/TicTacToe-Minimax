@@ -1,2 +1,2 @@
 # TicTacToe
-In C, using minimax algorithm
+In C, using minimax algorithm.
