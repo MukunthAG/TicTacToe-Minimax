@@ -235,7 +235,7 @@ int main() {
         printGame(cSet); // User turn
         temp = scoreEval(cSet);
         if (temp == 1) {
-            printf("YOU WIN! If you see this message, then you found a bug in my algorithm ;)\n");
+            printf("YOU WIN! If you see this message, then you found a bug in my code, consider constributing! ;)\n");
             break;
         }
         else if (temp == 0) {
