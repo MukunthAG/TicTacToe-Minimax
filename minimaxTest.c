@@ -1,3 +1,6 @@
+/* As the name suggests, this has no relation with the main file, I used it for testing a few
+things out, look it up only if you really need to*/
+
 #include <stdio.h>
 int positionHoldingMaxScore;
 int noOfCalls = 0;
@@ -36,25 +39,25 @@ int printGame(int ourArr[3][3]) {
     }
 }
 int minimax(int depth, int ourArr[3][3], int maximizer) {
-    //-------------------------------
+
     if (noOfCalls == 0) {
         noOfCalls++;
         maxDepth = depth;
     }
     int changeScore;
-    int i, j; int count; 
-    int countOfZeros = 0; // To DRAW when zeroes run out
+    int i, j; int count = 0; 
+    int countOfZeros = 0; 
     changeScore = -1;
-    for (i = 0; i < 3; i++) { // Check for Draw
+    for (i = 0; i < 3; i++) { 
         for (j = 0; j < 3; j++) {
             if (ourArr[i][j] == 0)  {
                 countOfZeros++; 
             }
         }
     } 
-    // changeScore = Draw condition
+
     if (countOfZeros == 0) changeScore = 0; 
-    for (i = 0; i < 3; i++) { // Row wise checking
+    for (i = 0; i < 3; i++) { 
         for (j = 1; j < 3; j++) {
             if (ourArr[i][j-1] == ourArr[i][j]) count++;
         }
@@ -64,9 +67,9 @@ int minimax(int depth, int ourArr[3][3], int maximizer) {
             }
             else if (ourArr[i][0] == 1) changeScore = -2;
         } 
-        count = 0; // Reset count after each scan for a row
+        count = 0; 
     }
-    for (i = 0; i < 3; i++) { // Coloumn wise checking
+    for (i = 0; i < 3; i++) { 
         for (j = 1; j < 3; j++) {
             if (ourArr[j-1][i] == ourArr[j][i]) count++;
         }
@@ -74,11 +77,11 @@ int minimax(int depth, int ourArr[3][3], int maximizer) {
             if (ourArr[0][i] == 9 ) changeScore = 1;
             else if (ourArr[0][i] == 1) changeScore = -2;
         }  
-        count = 0; // Reset count 
+        count = 0;  
     }
     
     i = 0;
-    // Diagonal wise checking, NEED IMPROVEMENT!!, to be applicable for n x n matrix
+
     if (ourArr[i][i] == ourArr[i+1][i+1] && ourArr[i+1][i+1] == ourArr[i+2][i+2] && ourArr[i][i] != 0) {
             if (ourArr[i][i] == 9) changeScore = 1;
             else if (ourArr[i][i] == 1) changeScore = -2;
@@ -88,9 +91,6 @@ int minimax(int depth, int ourArr[3][3], int maximizer) {
             if (ourArr[1][1] == 9) changeScore = 1;
             else if (ourArr[1][1] == 1) changeScore = -2;
         } 
-
-    //---------------------------
-    //if (/*depth == 0 || */changeScore == 1) {printGame(ourArr); printf("\n");}
 
     int children[10][3][3]; 
     int m; int w; int zeroCount = -1; int zeroInfo[10][3]; int p, q;   
@@ -134,8 +134,8 @@ int minimax(int depth, int ourArr[3][3], int maximizer) {
         for (y = 0; y <= zeroCount; y++) {
             evalMin = minimax(depth - 1, children[y], 9);
             minScore = min(minScore, evalMin);
-            if (depth == 7) {
-                 int dep = 7;
+            if (depth == 5) {
+                 int dep = 5;
             }
         }
         return minScore;
@@ -146,7 +146,7 @@ int main () {
     int cSet[3][3] = { 
       {9, 0, 0},
       {1, 1, 0}, 
-      {0, 0, 0} // returns the second zero!! Easy debug thing u can do really fast!!! 
+      {0, 0, 0} 
     };
     int pos;
     pos = minimax(6, cSet, 9);
