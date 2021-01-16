@@ -36,7 +36,8 @@ int max(int a, int b) { // Returns Max value of two numbers
     return (a > b) ? a : b;
 }
 
-int depthCounter(int ourArr[3][3]) { // Takes in an array made of 1(-->X), 9(-->O) and 0(-->#) to return the "depth" of the position, or in other words total no. of zeroes(empty positions).
+int depthCounter(int ourArr[3][3]) { /* Takes in an array made of 1(-->X), 9(-->O) and 0(-->#) to return the "depth" of the position, or
+in other words total no. of zeroes(empty positions) */
     int i, j, depthCount = -1;
     for (i = 0; i < 3; i++) { 
         for (j = 0; j < 3; j++) {
@@ -46,7 +47,8 @@ int depthCounter(int ourArr[3][3]) { // Takes in an array made of 1(-->X), 9(-->
     return depthCount; 
 }
 
-int optimalCoordinates(int ourArr[3][3], int optimalPosition) { // Returns the coordinates of the computer's choice by taking in the optimal Position(In the form of n'th zero) from the "minimax" function.
+int optimalCoordinates(int ourArr[3][3], int optimalPosition) { /* Returns the coordinates of the computer's choice by taking in the
+optimal position(in the form of n'th zero) from the "minimax" function */
     int i,j; int count = -1;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
@@ -62,7 +64,8 @@ int optimalCoordinates(int ourArr[3][3], int optimalPosition) { // Returns the c
 }
 
 
-int minimax(int depth, int ourArr[3][3], int player) { // The Brain of the game, takes in the depth of the tree to reach, the current position(2D array) of game and the player(in our case its always "9" or "CPU"), whose score must be maximized.
+int minimax(int depth, int ourArr[3][3], int player) { /* The Brain of the game, takes in the depth of the tree to reach, the 
+current position(2D array) of game and the player(in our case its always "9" or "CPU"), whose score must be maximized */
 
     if (noOfCalls == 0) { // This preserves the original call's depth, irrespective of the stack memory
         noOfCalls++;
@@ -206,7 +209,8 @@ int printGame(int ourArr[3][3]) {  // Prints the game, but now with naughts and 
     }
 }
     
-int scoreEval(int ourArr[3][3]) { // Basically the same kind of thing which happened at the start of minimax, now returns a value. I faced some issues of using the return value of this function inside the minimax.
+int scoreEval(int ourArr[3][3]) { /* Basically the same kind of thing which happened at the start of minimax, now returns a value. I faced
+some issues of using the return value of this function inside the minimax */
 
     int i, j; int count = 0; 
     int zeroCount = 0;
