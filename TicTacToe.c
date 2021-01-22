@@ -269,14 +269,13 @@ int main() {
         noOfCalls = 0;
 
         // Scan for coordinates and set it to be 1 (user input)
-        
+        reEnter: // If an invalid input is detected
         printf("You choose : ");
         scanf("%d %d", &x, &y);  
-        if (cSet[x][y] == 0) cSet[x][y] = 1; 
+        if (cSet[x][y] == 0) cSet[x][y] = 1; // Checking whether the input is valid, if not prompt the user to reEnter.
         else {
             printf("Refer to the Instructions. Enter a valid Input!\n");
-            printf("You choose : ");
-            scanf("%d %d", &x, &y);  
+            goto reEnter; 
         }
         printGame(cSet); // User turn
         temp = scoreEval(cSet);
